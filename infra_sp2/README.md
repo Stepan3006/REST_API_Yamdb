@@ -23,21 +23,27 @@ git clone https://github.com/Stepan3006/api_yamdb.git
 
 cd api_yamdb
 ## **Cоздать и активировать виртуальное окружение:**
+Создайте .env файл в директории infra/, в котором должны содержаться следующие переменные:
+- DB_ENGINE=django.db.backends.postgresql
+- DB_NAME= # название БД\ POSTGRES_USER= # ваше имя пользователя
+- POSTGRES_PASSWORD= # пароль для доступа к БД
+- DB_HOST=db
+- DB_PORT=5432\
 
-python3 -m venv env
+## **Из папки infra/ соберите образ при помощи docker-compose: ** 
 
-source env/bin/activate
+$ docker-compose up -d --build
 
-Установить зависимости из файла requirements.txt:
+## **Примените миграции  ** 
 
-python3 -m pip install --upgrade pip
+$ docker-compose exec web python manage.py migrate
 
-pip install -r requirements.txt
-## **Выполнить миграции:**
+## **Соберите статику  **  
 
-python3 manage.py migrate
-## **Запустить проект:**
+$ docker-compose exec web python manage.py collectstatic --no-input
 
-python3 manage.py runserver
+## **Для доступа к админке не забудьте создать суперюзера  **  
+
+$ docker-compose exec web python manage.py createsuperuser
 
 
